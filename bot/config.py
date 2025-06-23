@@ -1,0 +1,2 @@
+BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"
+WEBSITE_URL = "http://localhost:8000"
