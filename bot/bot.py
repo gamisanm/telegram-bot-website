@@ -1,11 +1,16 @@
-from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
-from .config import WEBSITE_URL
+from aiogram import Bot, Dispatcher, types
+from aiogram.filters import CommandStart
+from .config import BOT_TOKEN, WEBSITE_URL
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(f"Перейдите на сайт: {WEBSITE_URL}")
+bot = Bot(token=BOT_TOKEN)
+dp = Dispatcher()
 
-def setup_bot(token):
-    application = Application.builder().token(token).build()
-    application.add_handler(CommandHandler("start", start))
-    return application
+@dp.message(CommandStart())
+async def start(message: types.Message):
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=[
+        [types.InlineKeyboardButton(text="Открыть Web App", web_app=types.WebAppInfo(url=WEBSITE_URL))]
+    ])
+    await message.answer("Нажмите кнопку, чтобы открыть Web App:", reply_markup=keyboard)
+
+async def start_bot():
+    await dp.start_polling(bot)
